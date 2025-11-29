@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% block title %}Login & Sign Up{% endblock %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login & Sign Up</title>
+  <style>
+    :root {
+      --primary-color: #282828;
+      --secondary-color: #FFD700;
+      --background-color: #1F2020;
+      --text-color: #F8F8F8;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      margin: 0;
+    }
+
+    .login-container {
+      background: var(--primary-color);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      max-width: 400px;
+      margin: 80px auto;
+      text-align: center;
+    }
+
+    .login-container h2 {
+      color: var(--secondary-color);
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: var(--text-color);
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #444;
+      border-radius: 5px;
+      font-size: 14px;
+      background-color: var(--background-color);
+      color: var(--text-color);
+    }
+
+    .form-group button {
+      background-color: var(--secondary-color);
+      color: var(--primary-color);
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+      transition: background-color 0.3s;
+    }
+
+    .form-group button:hover {
+      background-color: #e5c700;
+    }
+
+    .error {
+      color: #FF6B6B;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .toggle-form {
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .toggle-form a {
+      color: var(--secondary-color);
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .toggle-form a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container" id="loginBox">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Enter your email">
+        <div class="error" id="emailError"></div>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter your password">
+        <div class="error" id="passwordError"></div>
+      </div>
+      <div class="form-group">
+        <button type="button" onclick="validateLogin()">Login</button>
+      </div>
+      <div class="toggle-form">
+        Don't have an account? <a onclick="toggleForm()">Sign Up</a>
+      </div>
+    </form>
+  </div>
+
+  <div class="login-container" id="signupBox" style="display: none;">
+    <h2>Sign Up</h2>
+    <form id="signupForm">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Enter your username">
+      </div>
+      <div class="form-group">
+        <label for="signupEmail">Email</label>
+        <input type="email" id="signupEmail" placeholder="Enter your email">
+      </div>
+      <div class="form-group">
+        <label for="signupPassword">Password</label>
+        <input type="password" id="signupPassword" placeholder="Create a password">
+      </div>
+      <div class="form-group">
+        <button type="button" onclick="validateSignup()">Sign Up</button>
+      </div>
+      <div class="toggle-form">
+        Already have an account? <a onclick="toggleForm()">Login</a>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    function validateLogin() {
+      document.getElementById("emailError").innerText = "";
+      document.getElementById("passwordError").innerText = "";
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      let hasError = false;
+      if (!email) {
+        document.getElementById("emailError").innerText = "Email is required.";
+        hasError = true;
+      }
+      if (!password) {
+        document.getElementById("passwordError").innerText = "Password is required.";
+        hasError = true;
+      }
+      if (!hasError) alert("Login Successful!");
+    }
+
+    function validateSignup() {
+      const username = document.getElementById("username").value.trim();
+      const email = document.getElementById("signupEmail").value.trim();
+      const password = document.getElementById("signupPassword").value.trim();
+      if (username && email && password.length >= 6) {
+        alert("Signup Successful! Welcome, " + username);
+      } else {
+        alert("Please fill all fields correctly.");
+      }
+    }
+
+    function toggleForm() {
+      document.getElementById("loginBox").style.display =
+        document.getElementById("loginBox").style.display === "none" ? "block" : "none";
+      document.getElementById("signupBox").style.display =
+        document.getElementById("signupBox").style.display === "none" ? "block" : "none";
+    }
+  </script>
+</body>
+</html>
+{% endblock %}

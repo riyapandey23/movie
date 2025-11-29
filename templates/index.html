@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Recommender</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #343a40;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+        }
+
+        .hero {
+            position: relative;
+            padding: 100px 20px;
+            color: #fff;
+            text-align: center;
+            background-color: #333;
+            background-size: cover;
+            background-position: center;
+            transition: background-image 0.3s ease-in-out;
+        }
+
+        .hero h1, .hero p, .search-bar {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+        }
+
+        .search-bar {
+            margin: 20px auto;
+            max-width: 600px;
+            display: flex;
+        }
+        .search-bar input, .search-bar button {
+            padding: 10px;
+            font-size: 16px;
+        }
+        .search-bar input {
+            flex-grow: 1;
+            border: none;
+            border-radius: 5px 0 0 5px;
+        }
+        .search-bar button {
+            background-color: #ff6f61;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .movies-section {
+            padding: 20px;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .movie-card {
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s;
+            position: relative;
+        }
+
+        .movie-card:hover {
+            transform: scale(1.05);
+        }
+
+        .movie-poster {
+            width: 100%;
+            height: auto;
+        }
+
+        .movie-info {
+            padding: 10px;
+        }
+
+        .movie-info h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .movie-info p {
+            margin: 5px 0 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .trailer-link {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .trailer-link:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            position: relative;
+            background-color: #fff;
+            margin: auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 800px;
+        }
+
+        .modal-content iframe {
+            width: 100%;
+            height: 450px;
+            border: none;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #333;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #ff6f61;
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>Discover Your Next Favorite Movie</h1>
+        <div class="search-bar">
+            <form action="/recommend" method="POST">
+                <input list="movies" name="movie" placeholder="Search for a movie...">
+                <datalist id="movies">
+                    {% for title in movie_titles %}
+                        <option value="{{ title }}">
+                    {% endfor %}
+                </datalist>
+                <button type="submit">Get Recommendations</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="movies-section">
+        <h2 class="section-title">Movies You May Like</h2>
+        <div class="movies-grid">
+            {% for movie in movie_data %}
+            <div class="movie-card">
+                <img src="{{ movie['poster'] }}" alt="{{ movie['name'] }} Poster" class="movie-poster">
+                <div class="movie-info">
+                    <h3>{{ movie['name'] }}</h3>
+                    <p><strong>Release Date:</strong> {{ movie['release_date'] }}</p>
+                </div>
+                {% if movie['trailer'] %}
+                <a href="{{ movie['trailer'] }}" class="trailer-link" data-trailer-url="{{ movie['trailer'] }}">Watch Trailer</a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="movies-section">
+        <h2 class="section-title">Popular Movies</h2>
+        <div class="movies-grid">
+            {% for movie in popular_movies %}
+            <div class="movie-card">
+                <img src="{{ movie['poster'] }}" alt="{{ movie['title'] }} Poster" class="movie-poster">
+                <div class="movie-info">
+                    <h3>{{ movie['title'] }}</h3>
+                    <p><strong>Release Date:</strong> {{ movie['release_date'] }}</p>
+                </div>
+                {% if movie['trailer'] %}
+                <a href="{{ movie['trailer'] }}" class="trailer-link" data-trailer-url="{{ movie['trailer'] }}">Watch Trailer</a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="movies-section">
+        <h2 class="section-title">Popular Web Series</h2>
+        <div class="movies-grid">
+            {% for series in web_series %}
+            <div class="movie-card">
+                <img src="{{ series['poster'] }}" alt="{{ series['title'] }} Poster" class="movie-poster">
+                <div class="movie-info">
+                    <h3>{{ series['title'] }}</h3>
+                    <p><strong>Release Date:</strong> {{ series['release_date'] }}</p>
+                </div>
+                {% if series['trailer'] %}
+                <a href="{{ series['trailer'] }}" class="trailer-link" data-trailer-url="{{ series['trailer'] }}">Watch Trailer</a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="movies-section">
+        <h2 class="section-title">Trending Anime</h2>
+        <div class="movies-grid">
+            {% for anime in anime %}
+            <div class="movie-card">
+                <img src="{{ anime['poster'] }}" alt="{{ anime['title'] }} Poster" class="movie-poster">
+                <div class="movie-info">
+                    <h3>{{ anime['title'] }}</h3>
+                    <p><strong>Release Date:</strong> {{ anime['release_date'] }}</p>
+                </div>
+                {% if anime['trailer'] %}
+                <a href="{{ anime['trailer'] }}" class="trailer-link" data-trailer-url="{{ anime['trailer'] }}">Watch Trailer</a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Modal Structure -->
+    <div id="trailerModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <iframe id="trailerIframe" src="" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <script>
+        // Modal functionality
+        var modal = document.getElementById("trailerModal");
+        var iframe = document.getElementById("trailerIframe");
+        var closeBtn = document.getElementsByClassName("close")[0];
+
+        document.querySelectorAll('.trailer-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                var trailerUrl = this.getAttribute('data-trailer-url');
+                iframe.src = trailerUrl;
+                modal.style.display = "flex";
+            });
+        });
+
+        closeBtn.onclick = function() {
+            modal.style.display = "none";
+            iframe.src = "";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+                iframe.src = "";
+            }
+        }
+    </script>
+
+</body>
+</html>

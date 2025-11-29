@@ -1,0 +1,301 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Recommender System</title>
+    <style>
+        /* Updated color theme for your website */
+        :root {
+            --primary-color: #0F0F0F;  /* Dark Gray/Black */
+            --secondary-color: #F8F8F8; /* Light Gray/White */
+            --accent-color: #3C3C3C;   /* Medium Gray */
+            --background-color: #1F2020; /* Very Dark Gray */
+            --card-color: #282828; /* Dark Gray */
+            --golden-color: #FFD700; /* Gold */
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--secondary-color);
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: var(--golden-color);
+        }
+
+        select, button {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px;
+        }
+
+        .movies-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        /* Animation for fade-in effect */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Movie Card Animation */
+        .movie-card {
+            background-color: var(--card-color);
+            padding: 10px;
+            border-radius: 8px;
+            width: 250px;
+            text-align: center;
+            border: 1px solid var(--accent-color);
+            color: var(--secondary-color);
+            box-shadow: 0 4px 8px rgba(255, 215, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        /* Hover effect */
+        .movie-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(255, 215, 0, 0.4);
+        }
+
+        /* Smooth appearance for images */
+        .movie-card img {
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+
+        /* Hover effect for images */
+        .movie-card:hover img {
+            transform: scale(1.1);
+            opacity: 0.9;
+        }
+
+        .movie-card img {
+            width: 100%;
+            border-radius: 5px;
+        }
+
+        /* Loading spinner styles */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--golden-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+            margin: 50px auto;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Movie Details Styles */
+        .movie-details {
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        .movie-details p {
+            margin: 5px 0;
+        }
+
+        /* Trailer container - occupies 50% of the screen */
+        .trailer-container {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 50%;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            z-index: 1000;
+            text-align: center;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Loading effect on button */
+        .loading-button {
+            position: relative;
+            background-color: var(--golden-color);
+            color: var(--primary-color);
+            border: none;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .loading-button.loading {
+            color: white;
+            background-color: #ffeb99; /* Light yellow color */
+        }
+
+        .loading-button.loading::after {
+            content: 'Loading...';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Close trailer button */
+        .close-trailer-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--golden-color);
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        /* Button styles */
+        .button {
+            background-color: var(--accent-color);
+            color: var(--secondary-color);
+            border: 2px solid var(--golden-color);
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .button:hover {
+            background-color: var(--primary-color);
+            color: var(--golden-color);
+        }
+
+    </style>
+</head>
+<body>
+    
+    <h1>Welcome to the Movie Recommender System</h1>
+    <p>Discover your next favorite movie!</p>
+
+    <form id="recommendation-form">
+        <select name="movie" id="movie">
+            {% for title in movie_list %}
+                <option value="{{ title }}">{{ title }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="button">Show Recommendation</button>
+    </form>
+
+    <!-- Loading spinner -->
+    <div id="loader" class="loader"></div>
+
+    <div class="movies-container" id="recommendations"></div>
+
+    <!-- Trailer Container (hidden by default) -->
+    <div id="trailer-container" class="trailer-container">
+        <button class="close-trailer-btn" onclick="closeTrailer()">Close</button>
+        <iframe id="trailer-iframe" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+
+    <script>
+        document.getElementById('recommendation-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            let movie = document.getElementById('movie').value;
+
+            // Show the loading spinner
+            document.getElementById('loader').style.display = 'block';
+            let container = document.getElementById('recommendations');
+            container.innerHTML = ''; // Clear previous recommendations
+
+            fetch('/recommend', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'movie=' + encodeURIComponent(movie)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Hide the loading spinner once recommendations are loaded
+                document.getElementById('loader').style.display = 'none';
+                container.innerHTML = ''; // Clear the container before appending new movies
+                data.forEach(movie => {
+                    let movieCard = document.createElement('div');
+                    movieCard.className = 'movie-card';
+                    movieCard.innerHTML = `
+                        <img src="${movie.poster}" alt="${movie.title}">
+                        <p>${movie.title}</p>
+                        <div class="movie-details">
+                            <p><strong>Overview:</strong> ${movie.overview}</p>
+                            <p><strong>Genres:</strong> ${movie.genres}</p>
+                            <p><strong>Cast:</strong> ${movie.cast}</p>
+                            <p><strong>Release Date:</strong> ${movie.release_date}</p>
+                            <p><strong>Runtime:</strong> ${movie.runtime}</p>
+                            <p><strong>Rating:</strong> ${movie.vote_average}</p>
+                        </div>
+
+                        <!-- Watch Trailer Button -->
+                        <button class="loading-button" id="trailer-btn-${movie.title}" onclick="showTrailer('${movie.trailer}', '${movie.title}')">Watch Trailer</button>
+                    `;
+                    container.appendChild(movieCard);
+                });
+            });
+        });
+
+        // Function to show the trailer in a larger iframe
+        function showTrailer(trailerUrl, movieTitle) {
+            if (!trailerUrl) {
+                alert("Trailer not available.");
+                return;
+            }
+
+            // Get the button for the specific movie
+            const button = document.getElementById(`trailer-btn-${movieTitle}`);
+
+            // Add loading effect to the button (replace text with "Loading..." and apply the loading class)
+            button.textContent = "Loading..."; // Change button text
+            button.classList.add('loading');   // Apply loading class to show loading effect
+
+            // Set the iframe source to the trailer URL
+            const iframe = document.getElementById('trailer-iframe');
+            iframe.src = trailerUrl;
+
+            // Show the trailer container
+            const trailerContainer = document.getElementById('trailer-container');
+            trailerContainer.style.display = 'block';
+
+            // Remove loading effect from the button once the trailer is loaded
+            iframe.onload = function() {
+                button.classList.remove('loading');
+                button.textContent = "Watch Trailer"; // Reset the button text
+            };
+        }
+
+        // Function to close the trailer view
+        function closeTrailer() {
+            document.getElementById('trailer-container').style.display = 'none';
+            const iframe = document.getElementById('trailer-iframe');
+            iframe.src = ''; // Stop the video when the trailer is closed
+        }
+    </script>
+</body>
+</html>
+{% endblock %}
