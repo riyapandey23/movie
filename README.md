@@ -59,3 +59,16 @@ Movie-Recommendation-System/ │ ├── data/                  # Raw and clea
 
 ---
 
+##  Cosine similarity
+
+➡️ Cosine similarity = how similar two movies are based on the angle between their feature vectors.
+
+It checks how close the direction of two vectors is, ignoring their size.
+
+If the angle between them is small → similarity is close to 1 → very similar
+
+If the angle is large → similarity is close to 0 → not similar
+
+Why it’s useful in movie recommendation?
+
+Because it compares movies based on their features (genres, overview, cast, etc.) and finds which ones “point in the same direction,” meaning they share similar content.
