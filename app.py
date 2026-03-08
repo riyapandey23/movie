@@ -3,7 +3,6 @@ import requests
 from flask import Flask, render_template, request, jsonify , redirect, url_for
 
 app = Flask(__name__)
-
 # API keys
 OMDB_API_KEY = "3571f861"
 YOUTUBE_API_KEY = "AIzaSyCfI8oEP-UMOO7-qv84w8tKlkkr1NgDEuE"
@@ -29,7 +28,6 @@ def fetch_movie_details(movie_title):
         return movie_details
     else:
         return {}
-
 # Function to get the trailer URL from YouTube
 def get_youtube_trailer(movie_title):
     search_url = f"https://www.googleapis.com/youtube/v3/search?part=snippet&q={movie_title} trailer&key={YOUTUBE_API_KEY}"
