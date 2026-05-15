@@ -152,9 +152,7 @@ The user searches for **Spider-Man 3**, and the system displays:
 - Runtime
 - Release Date
 
-```md
-![Home Page](image\movie1.jpg)
-```
+<img src="./movie/movie1.jpg" width="1000">
 
 ---
 
@@ -162,9 +160,7 @@ The user searches for **Spider-Man 3**, and the system displays:
 
 When the trailer button is clicked, the trailer opens inside the website using an embedded YouTube player.
 
-```md
-![Trailer Player](/image/movie2.jpg)
-```
+<img src="./movie/movie2.jpg" width="1000">
 
 ---
 
@@ -172,9 +168,7 @@ When the trailer button is clicked, the trailer opens inside the website using a
 
 Visualization representing how cosine similarity works for comparing movie vectors.
 
-```md
-![Cosine Similarity](image\Cosine.jpg)
-```
+<img src="./movie/Cosine.jpg" width="700">
 
 ---
 
