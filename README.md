@@ -1,74 +1,344 @@
-Here’s your complete README.md file in code format, ready to be added to your GitHub repository:
 # 🎬 Movie Recommendation System
 
-A **content-based movie recommender system** that suggests movies similar to the one selected by the user. The system leverages **machine learning (ML)** for similarity computation, integrates with **OMDB API** for movie posters, and **YouTube API** for trailers.
+A **content-based movie recommender system** that suggests movies similar to the one selected by the user using **Machine Learning** techniques.  
+The system analyzes movie metadata such as genres, cast, keywords, and overview to compute similarity between movies and provide accurate recommendations.
+
+This project integrates:
+
+- 🎥 **YouTube API** for trailers
+- 🖼️ **OMDB API** for movie posters and metadata
+- 🧠 **Cosine Similarity + TF-IDF Vectorization**
+- 🌐 **Flask Backend**
+- 💻 **Interactive Frontend UI**
 
 ---
 
-## 📌 Features
+# 📌 Features
 
-- Content-Based Filtering using similarity matrix
-- Data pipeline built in Jupyter Notebook: collection, cleaning, storing, and ML model training
-- Flask backend written in Python using VS Code
-- Frontend UI/UX built with HTML, CSS, and JavaScript
-- Movie metadata: title, release date, cast, ratings, etc.
-- OMDB API for movie posters
-- YouTube API for movie trailers
+✅ Content-Based Filtering using similarity matrix  
+✅ Machine Learning model built in Jupyter Notebook  
+✅ Movie recommendations based on selected movie  
+✅ Dynamic movie details display:
+- Poster
+- Overview
+- Cast
+- Genre
+- Ratings
+- Runtime
+- Release Date
 
----
-
-## 🛠️ Tech Stack
-
-| Layer        | Tools/Technologies                         |
-|--------------|--------------------------------------------|
-| Data Science | Jupyter Notebook, Pandas, NumPy, Scikit-learn |
-| Backend      | Flask (Python)                             |
-| Frontend     | HTML, CSS, JavaScript                      |
-| IDE          | VS Code                                    |
-| APIs         | OMDB API, YouTube API                      |
+✅ Integrated movie trailer playback using YouTube  
+✅ Interactive and responsive frontend UI  
+✅ Hover effects and smooth UI interactions  
+✅ Flask backend serving ML recommendations  
 
 ---
 
-## ⚙️ Workflow
+# 🛠️ Tech Stack
 
-1. **Data Collection**: Gather movie metadata from TMDB dataset
-2. **Data Cleaning**: Preprocess and normalize features
-3. **Data Storage**: Save cleaned data and similarity matrix as `.pkl` files
-4. **Model Building**: Use TF-IDF and cosine similarity in Jupyter Notebook
-5. **Backend Integration**: Flask app loads model and serves recommendations
-6. **Frontend UI**: Dropdown menu for movie selection, dynamic display of results
-7. **API Integration**: OMDB for posters, YouTube for trailers
-
----
-
-## 🚀 How It Works
-
-- User selects a movie from the dropdown
-- System computes similarity using the pre-trained model
-- Fetches movie details: title, release date, cast, ratings
-- OMDB API fetches poster
-- YouTube API fetches trailer
-- Recommendations are displayed with visuals and links
+| Layer | Technologies |
+|---|---|
+| Data Science | Python, Pandas, NumPy, Scikit-learn |
+| Machine Learning | TF-IDF Vectorizer, Cosine Similarity |
+| Backend | Flask |
+| Frontend | HTML, CSS, JavaScript |
+| APIs | OMDB API, YouTube API |
+| Development Tools | VS Code, Jupyter Notebook |
 
 ---
 
-## 📂 Project Structure
+# 🧠 Machine Learning Approach
 
-
-Movie-Recommendation-System/ │ ├── data/                  # Raw and cleaned datasets ├── notebooks/             # Jupyter notebooks for model building ├── backend/               # Flask backend code │   ├── app.py             # Main Flask application │   ├── movies_dict.pkl    # Movie metadata dictionary │   ├── similarity.pkl     # Similarity matrix │   └── requirements.txt   # Python dependencies ├── frontend/              # HTML, CSS, JS files │   ├── index.html │   ├── style.css │   └── script.js ├── static/                # Static assets (images, posters) ├── templates/             # Flask HTML templates └── README.md              # Project documentation
+This project uses a **Content-Based Recommendation System**.
+
+The recommendation engine compares movies based on:
+- Genres
+- Keywords
+- Cast
+- Crew
+- Movie Overview
+
+These features are merged into a single text representation and converted into vectors using **TF-IDF Vectorization**.
+
+Then, **Cosine Similarity** is used to calculate how similar movies are to each other.
 
 ---
 
-##  Cosine similarity
+# 📐 Cosine Similarity
 
-➡️ Cosine similarity = how similar two movies are based on the angle between their feature vectors.
+➡️ **Cosine Similarity** measures how similar two movies are based on the angle between their feature vectors.
 
-- It checks how close the direction of two vectors is, ignoring their size.
+If the angle between vectors is:
 
-If the angle between them is small → similarity is close to 1 → very similar
+- **Small** → similarity close to **1** → movies are highly similar
+- **Large** → similarity close to **0** → movies are different
 
-If the angle is large → similarity is close to 0 → not similar
+### Formula
 
-Why it’s useful in movie recommendation?
+\[
+\text{Cosine Similarity} =
+\frac{A \cdot B}{||A|| \ ||B||}
+\]
 
-Because it compares movies based on their features (genres, overview, cast, etc.) and finds which ones “point in the same direction,” meaning they share similar content.
+Where:
+- \(A \cdot B\) = Dot Product of vectors
+- \(||A||\) = Magnitude of vector A
+- \(||B||\) = Magnitude of vector B
+
+---
+
+# ⚙️ Workflow
+
+## 1️⃣ Data Collection
+Movie metadata is collected from the TMDB dataset.
+
+## 2️⃣ Data Cleaning
+The dataset is cleaned and important features are extracted.
+
+## 3️⃣ Feature Engineering
+Relevant features are combined into tags:
+- Genres
+- Overview
+- Keywords
+- Cast
+- Crew
+
+## 4️⃣ Vectorization
+TF-IDF converts text data into numerical vectors.
+
+## 5️⃣ Similarity Calculation
+Cosine similarity computes similarity scores between movies.
+
+## 6️⃣ Model Storage
+Processed data and similarity matrix are stored as:
+- `movies_dict.pkl`
+- `similarity.pkl`
+
+## 7️⃣ Flask Backend
+Flask loads the ML model and serves recommendations to the frontend.
+
+## 8️⃣ Frontend Display
+The UI dynamically displays:
+- Recommended movies
+- Posters
+- Ratings
+- Trailer player
+- Movie details
+
+---
+
+# 🚀 How It Works
+
+1. User selects or searches for a movie  
+2. The system finds similar movies using cosine similarity  
+3. Flask backend sends recommendation data  
+4. OMDB API fetches posters and movie metadata  
+5. YouTube API fetches movie trailers  
+6. Recommended movies are displayed on the webpage  
+
+---
+
+# 🖼️ Project Screenshots
+
+## 🔍 Search & Recommendation Page
+
+The user searches for **Spider-Man 3**, and the system displays:
+- 5 similar Spider-Man movie recommendations
+- Posters
+- Overview
+- Cast
+- Genre
+- Ratings
+- Runtime
+- Release Date
+
+```md
+![Home Page](image\movie1.jpg)
+```
+
+---
+
+## 🎥 Trailer Playback Section
+
+When the trailer button is clicked, the trailer opens inside the website using an embedded YouTube player.
+
+```md
+![Trailer Player](/image/movie2.jpg)
+```
+
+---
+
+## 📊 Cosine Similarity Diagram
+
+Visualization representing how cosine similarity works for comparing movie vectors.
+
+```md
+![Cosine Similarity](image\Cosine.jpg)
+```
+
+---
+
+# 📂 Project Structure
+
+```bash
+Movie-Recommendation-System/
+│
+├── data/
+│   ├── movies.csv
+│   ├── credits.csv
+│   └── cleaned_data.csv
+│
+├── notebooks/
+│   └── movie_recommender.ipynb
+│
+├── backend/
+│   ├── app.py
+│   ├── movies_dict.pkl
+│   ├── similarity.pkl
+│   └── requirements.txt
+│
+├── frontend/
+│   ├── index.html
+│   ├── style.css
+│   └── script.js
+│
+├── templates/
+│   └── index.html
+│
+├── static/
+│   ├── css/
+│   ├── js/
+│   ├── images/
+│   └── posters/
+│
+├── images/
+│   ├── home-page.png
+│   ├── trailer-player.png
+│   └── cosine-similarity.png
+│
+└── README.md
+```
+
+---
+
+# 📦 Installation
+
+## 1️⃣ Clone Repository
+
+```bash
+git clone https://github.com/your-username/Movie-Recommendation-System.git
+```
+
+---
+
+## 2️⃣ Navigate to Project
+
+```bash
+cd Movie-Recommendation-System
+```
+
+---
+
+## 3️⃣ Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## 4️⃣ Run Flask Application
+
+```bash
+python app.py
+```
+
+---
+
+## 5️⃣ Open Browser
+
+```bash
+http://127.0.0.1:5000/
+```
+
+---
+
+# 🔑 API Configuration
+
+## OMDB API
+
+Used for:
+- Movie posters
+- Ratings
+- Metadata
+
+Get API Key:
+👉 https://www.omdbapi.com/
+
+---
+
+## YouTube API
+
+Used for:
+- Movie trailers
+
+Get API Key:
+👉 https://console.cloud.google.com/
+
+---
+
+# 📈 Future Improvements
+
+- Personalized recommendations
+- User authentication system
+- Watchlist feature
+- Collaborative filtering
+- Hybrid recommendation system
+- Sentiment analysis on reviews
+- Trending movie section
+- Dark/Light mode
+- Mobile optimization
+
+---
+
+# 💡 Learning Outcomes
+
+Through this project, I learned:
+
+- Machine Learning fundamentals
+- Recommendation systems
+- Feature engineering
+- TF-IDF vectorization
+- Cosine similarity
+- Flask backend development
+- API integration
+- Frontend development
+- Full-stack project integration
+
+---
+
+# 🙌 Acknowledgements
+
+- TMDB Dataset
+- OMDB API
+- YouTube Data API
+- Scikit-learn Documentation
+- Flask Documentation
+
+---
+
+# 👩‍💻 Author
+
+## Riya H. S. Pandey
+
+Passionate about:
+- Data Science
+- Machine Learning
+- Data Engineering
+- Full Stack Development
+
+---
+
+# ⭐ If you like this project
+
+Give it a ⭐ on GitHub!
