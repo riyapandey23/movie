@@ -1,6 +1,7 @@
 # 🎬 Movie Recommendation System
 
-A **content-based movie recommender system** that suggests movies similar to the one selected by the user using **Machine Learning** techniques.  
+A **content-based movie recommender system** that suggests movies similar to the one selected by the user using **Machine Learning** techniques.
+
 The system analyzes movie metadata such as genres, cast, keywords, and overview to compute similarity between movies and provide accurate recommendations.
 
 This project integrates:
@@ -19,6 +20,7 @@ This project integrates:
 ✅ Machine Learning model built in Jupyter Notebook  
 ✅ Movie recommendations based on selected movie  
 ✅ Dynamic movie details display:
+
 - Poster
 - Overview
 - Cast
@@ -52,6 +54,7 @@ This project integrates:
 This project uses a **Content-Based Recommendation System**.
 
 The recommendation engine compares movies based on:
+
 - Genres
 - Keywords
 - Cast
@@ -73,7 +76,7 @@ If the angle between vectors is:
 - **Small** → similarity close to **1** → movies are highly similar
 - **Large** → similarity close to **0** → movies are different
 
-### Formula
+## Formula
 
 \[
 \text{Cosine Similarity} =
@@ -81,6 +84,7 @@ If the angle between vectors is:
 \]
 
 Where:
+
 - \(A \cdot B\) = Dot Product of vectors
 - \(||A||\) = Magnitude of vector A
 - \(||B||\) = Magnitude of vector B
@@ -90,13 +94,17 @@ Where:
 # ⚙️ Workflow
 
 ## 1️⃣ Data Collection
+
 Movie metadata is collected from the TMDB dataset.
 
 ## 2️⃣ Data Cleaning
+
 The dataset is cleaned and important features are extracted.
 
 ## 3️⃣ Feature Engineering
+
 Relevant features are combined into tags:
+
 - Genres
 - Overview
 - Keywords
@@ -104,21 +112,28 @@ Relevant features are combined into tags:
 - Crew
 
 ## 4️⃣ Vectorization
+
 TF-IDF converts text data into numerical vectors.
 
 ## 5️⃣ Similarity Calculation
+
 Cosine similarity computes similarity scores between movies.
 
 ## 6️⃣ Model Storage
+
 Processed data and similarity matrix are stored as:
+
 - `movies_dict.pkl`
 - `similarity.pkl`
 
 ## 7️⃣ Flask Backend
+
 Flask loads the ML model and serves recommendations to the frontend.
 
 ## 8️⃣ Frontend Display
+
 The UI dynamically displays:
+
 - Recommended movies
 - Posters
 - Ratings
@@ -143,6 +158,7 @@ The UI dynamically displays:
 ## 🔍 Search & Recommendation Page
 
 The user searches for **Spider-Man 3**, and the system displays:
+
 - 5 similar Spider-Man movie recommendations
 - Posters
 - Overview
@@ -152,7 +168,7 @@ The user searches for **Spider-Man 3**, and the system displays:
 - Runtime
 - Release Date
 
-<img src="./movie/movie1.jpg" width="1000">
+<img src="./image/movie1.jpg" width="1000">
 
 ---
 
@@ -160,7 +176,7 @@ The user searches for **Spider-Man 3**, and the system displays:
 
 When the trailer button is clicked, the trailer opens inside the website using an embedded YouTube player.
 
-<img src="./movie/movie2.jpg" width="1000">
+<img src="./image/movie2.jpg" width="1000">
 
 ---
 
@@ -168,48 +184,33 @@ When the trailer button is clicked, the trailer opens inside the website using a
 
 Visualization representing how cosine similarity works for comparing movie vectors.
 
-<img src="./movie/Cosine.jpg" width="700">
+<img src="./image/Cosine.jpg" width="700">
 
 ---
 
 # 📂 Project Structure
 
 ```bash
-Movie-Recommendation-System/
+movie/
 │
-├── data/
-│   ├── movies.csv
-│   ├── credits.csv
-│   └── cleaned_data.csv
-│
-├── notebooks/
-│   └── movie_recommender.ipynb
-│
-├── backend/
-│   ├── app.py
-│   ├── movies_dict.pkl
-│   ├── similarity.pkl
-│   └── requirements.txt
-│
-├── frontend/
-│   ├── index.html
-│   ├── style.css
-│   └── script.js
-│
-├── templates/
-│   └── index.html
+├── client/
+├── image/
+│   ├── movie1.jpg
+│   ├── movie2.jpg
+│   └── Cosine.jpg
 │
 ├── static/
 │   ├── css/
-│   ├── js/
-│   ├── images/
-│   └── posters/
+│   └── js/
 │
-├── images/
-│   ├── home-page.png
-│   ├── trailer-player.png
-│   └── cosine-similarity.png
+├── templates/
 │
+├── app.py
+├── movie_dict.pkl
+├── movies.pkl
+├── similarity.pkl
+├── tmdb_5000_movies.csv
+├── tmdb_5000_credits.csv
 └── README.md
 ```
 
@@ -220,15 +221,15 @@ Movie-Recommendation-System/
 ## 1️⃣ Clone Repository
 
 ```bash
-git clone https://github.com/your-username/Movie-Recommendation-System.git
+git clone https://github.com/your-username/movie.git
 ```
 
 ---
 
-## 2️⃣ Navigate to Project
+## 2️⃣ Navigate to Project Folder
 
 ```bash
-cd Movie-Recommendation-System
+cd movie
 ```
 
 ---
@@ -262,11 +263,13 @@ http://127.0.0.1:5000/
 ## OMDB API
 
 Used for:
+
 - Movie posters
 - Ratings
 - Metadata
 
 Get API Key:
+
 👉 https://www.omdbapi.com/
 
 ---
@@ -274,9 +277,11 @@ Get API Key:
 ## YouTube API
 
 Used for:
+
 - Movie trailers
 
 Get API Key:
+
 👉 https://console.cloud.google.com/
 
 ---
@@ -326,6 +331,7 @@ Through this project, I learned:
 ## Riya H. S. Pandey
 
 Passionate about:
+
 - Data Science
 - Machine Learning
 - Data Engineering
@@ -333,6 +339,6 @@ Passionate about:
 
 ---
 
-# ⭐ If you like this project
+# ⭐ If You Like This Project
 
 Give it a ⭐ on GitHub!
